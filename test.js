@@ -3,6 +3,7 @@ const app = require("./index.js");
 
 const startTime = require("./index.js").startTime;
 const endTime = require("./index.js").endTime;
+const timeRange = require("./index.js").timeRange;
 
 describe("App", function() {
     describe("startTime()", function() {
@@ -47,6 +48,21 @@ describe("App", function() {
         it("End time should be a number", function() {
             let result = endTime("String");
             assert.equal(result, false);
+        });
+    });
+    //  Not concerned with allowable start/end times
+    describe("timeRange()", function() {
+        it("Start time cannot be after end time", function() {
+            let result = timeRange(2, 18);
+            assert.equal(result, false);
+        });
+        it("Start time cannot be equal to end time", function() {
+            let result = timeRange(18, 18);
+            assert.equal(result, false);
+        });
+        it("Start time is before end time with rollover", function() {
+            let result = timeRange(18, 2);
+            assert.equal(result, true);
         });
     });
 });
