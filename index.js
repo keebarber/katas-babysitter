@@ -40,14 +40,36 @@ module.exports = {
 
         return goodTimeRange;
     },
-    payGrade1: function(start, end) {
+    bedtimeCheck: function(start, end, bedtime) {
+        //  Just going to say that the kid can only go to bed when the babysitter is there
+        //  A bedtime time-range would have been useful, but this will do
+        let goodBedtime= false;
+
+        if (start > 0 && start <= 4) {
+            start += 24;
+        }
+        if (end > 0 && end <= 4) {
+            end += 24;
+        }
+         if (bedtime > 0 && bedtime <= 4) {
+            bedtime += 24;
+        }
+
+        if(bedtime>=start && bedtime<=end) {
+            return !goodBedtime;
+        }
+        return goodBedtime;
+    },
+    payGrade1: function(start, bedtime) {
         let hoursWorkedAtPayGrade1 = 0;
 
-        if (start < 24 && start >= 17) {
-            if (end < 17) {
-                hoursWorkedAtPayGrade1 = 24 - start;
-            } else {
-                hoursWorkedAtPayGrade1 = end - start;
+        if(bedtime < 24) {
+            if (start < 24 && start >= 17) {
+                if (bedtime < 17) {
+                    hoursWorkedAtPayGrade1 = 24 - start;
+                } else {
+                    hoursWorkedAtPayGrade1 = bedtime - start;
+                }
             }
         }
 

@@ -5,6 +5,7 @@ const startTime = require("./index.js").startTime;
 const endTime = require("./index.js").endTime;
 const timeRange = require("./index.js").timeRange;
 const payGrade1 = require("./index.js").payGrade1;
+const bedtimeCheck = require("./index.js").bedtimeCheck;
 
 describe("App", function() {
     describe("startTime()", function() {
@@ -63,6 +64,24 @@ describe("App", function() {
         });
         it("Start time is before end time with rollover", function() {
             let result = timeRange(18, 2);
+            assert.equal(result, true);
+        });
+    });
+    describe("bedtimeCheck()", function() {
+        it("Bedtime cannot be earlier than start", function() {
+            let result = bedtimeCheck(18, 22, 17);
+            assert.equal(result, false);
+        });
+        it("Bedtime cannot be later than end", function() {
+            let result = bedtimeCheck(18, 2, 4);
+            assert.equal(result, false);
+        });
+        it("Bedtime can be equal to start/end", function() {
+            let result = bedtimeCheck(20, 2, 20);
+            assert.equal(result, true);
+        });
+        it("Bedtime is OK", function() {
+            let result = bedtimeCheck(19, 21, 20);
             assert.equal(result, true);
         });
     });
