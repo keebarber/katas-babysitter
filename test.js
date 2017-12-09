@@ -4,6 +4,7 @@ const app = require("./index.js");
 const startTime = require("./index.js").startTime;
 const endTime = require("./index.js").endTime;
 const timeRange = require("./index.js").timeRange;
+const payGrade1 = require("./index.js").payGrade1;
 
 describe("App", function() {
     describe("startTime()", function() {
@@ -63,6 +64,24 @@ describe("App", function() {
         it("Start time is before end time with rollover", function() {
             let result = timeRange(18, 2);
             assert.equal(result, true);
+        });
+    });
+    describe("payGrade1()", function() {
+        it("Time worked at $12/hr should be 5", function() {
+            let result = payGrade1(17, 22);
+            assert.equal(result, 5);
+        });
+        it("Time worked at $12/hr should be 0", function() {
+            let result = payGrade1(18, 2);
+            assert.equal(result, 6);
+        });
+        it("Time worked at $12/hr should be 0", function() {
+            let result = payGrade1(3, 8);
+            assert.equal(result, 0);
+        });
+        it("Time worked at $12/hr should round up.", function() {
+            let result = payGrade1(19.5, 1);
+            assert.equal(result, 5);
         });
     });
 });
