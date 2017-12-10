@@ -40,22 +40,15 @@ module.exports = {
 
         return goodTimeRange;
     },
-    bedtimeCheck: function(start, end, bedtime) {
-        //  Just going to say that the kid can only go to bed when the babysitter is there
-        //  A bedtime time-range would have been useful, but this will do
-        let goodBedtime= false;
+    bedtimeCheck: function(bedtime) {
+        //  Bedtime has to be before midnight but could be before babysitter arrives
+        let goodBedtime = false;
 
-        if (start > 0 && start <= 4) {
-            start += 24;
-        }
-        if (end > 0 && end <= 4) {
-            end += 24;
-        }
-         if (bedtime > 0 && bedtime <= 4) {
+        if (bedtime > 0 && bedtime <= 4) {
             bedtime += 24;
         }
 
-        if(bedtime>=start && bedtime<=end) {
+        if (bedtime < 24) {
             return !goodBedtime;
         }
         return goodBedtime;
@@ -63,16 +56,38 @@ module.exports = {
     payGrade1: function(start, bedtime) {
         let hoursWorkedAtPayGrade1 = 0;
 
-        if(bedtime < 24) {
-            if (start < 24 && start >= 17) {
-                if (bedtime < 17) {
-                    hoursWorkedAtPayGrade1 = 24 - start;
-                } else {
-                    hoursWorkedAtPayGrade1 = bedtime - start;
-                }
+        if (start < 24 && start >= 17) {
+            if (bedtime < 17) {
+                hoursWorkedAtPayGrade1 = 24 - start;
+            } else {
+                hoursWorkedAtPayGrade1 = bedtime - start;
             }
         }
 
         return Math.ceil(hoursWorkedAtPayGrade1);
+    },
+    payGrade2: function(bedtime, end) {
+        let hoursWorkedAtPayGrade2 = 0;
+
+        if (end > 0 && end <= 4) {
+            end += 24;
+        }
+
+        if (end > 24) {
+            hoursWorkedAtPayGrade2 = 24 - bedtime;
+        } else {
+            hoursWorkedAtPayGrade2 = end - bedtime;
+        }
+
+        return Math.ceil(hoursWorkedAtPayGrade2);
+    },
+    payGrade3: function(end) {
+        let hoursWorkedAtPayGrade3 = 0;
+
+        if (end > 0 && end <= 4) {
+            hoursWorkedAtPayGrade3 = end;
+        }
+
+        return Math.ceil(hoursWorkedAtPayGrade3);
     }
 };

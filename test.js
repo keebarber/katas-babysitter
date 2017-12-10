@@ -4,8 +4,10 @@ const app = require("./index.js");
 const startTime = require("./index.js").startTime;
 const endTime = require("./index.js").endTime;
 const timeRange = require("./index.js").timeRange;
-const payGrade1 = require("./index.js").payGrade1;
 const bedtimeCheck = require("./index.js").bedtimeCheck;
+const payGrade1 = require("./index.js").payGrade1;
+const payGrade2 = require("./index.js").payGrade2;
+const payGrade3 = require("./index.js").payGrade3;
 
 describe("App", function() {
     describe("startTime()", function() {
@@ -68,21 +70,13 @@ describe("App", function() {
         });
     });
     describe("bedtimeCheck()", function() {
-        it("Bedtime cannot be earlier than start", function() {
-            let result = bedtimeCheck(18, 22, 17);
-            assert.equal(result, false);
-        });
-        it("Bedtime cannot be later than end", function() {
-            let result = bedtimeCheck(18, 2, 4);
-            assert.equal(result, false);
-        });
-        it("Bedtime can be equal to start/end", function() {
-            let result = bedtimeCheck(20, 2, 20);
+        it("Bedtime must be before midnight", function() {
+            let result = bedtimeCheck(17);
             assert.equal(result, true);
         });
-        it("Bedtime is OK", function() {
-            let result = bedtimeCheck(19, 21, 20);
-            assert.equal(result, true);
+        it("Bedtime cannot be after midnight", function() {
+            let result = bedtimeCheck(2);
+            assert.equal(result, false);
         });
     });
     describe("payGrade1()", function() {
@@ -95,12 +89,26 @@ describe("App", function() {
             assert.equal(result, 6);
         });
         it("Time worked at $12/hr should be 0", function() {
-            let result = payGrade1(3, 8);
-            assert.equal(result, 0);
+            let result = payGrade1(20, 22);
+            assert.equal(result, 2);
         });
         it("Time worked at $12/hr should round up.", function() {
-            let result = payGrade1(19.5, 1);
+            let result = payGrade1(19.5, 24);
             assert.equal(result, 5);
+        });
+    });
+    describe("payGrade3()", function() {
+        it("Time worked at $12/hr should be 4", function() {
+            let result = payGrade3(4);
+            assert.equal(result, 4);
+        });
+        it("Time worked at $16/hr should be 0", function() {
+            let result = payGrade3(12);
+            assert.equal(result, 0);
+        });
+        it("Time worked at $16/hr should be 2", function() {
+            let result = payGrade3(1.5);
+            assert.equal(result, 2);
         });
     });
 });
