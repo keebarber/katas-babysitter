@@ -2,7 +2,7 @@ module.exports = {
     startTime: function(start) {
         let goodStartTime = false;
 
-        if (start > 0 && start <= 4) {
+        if (start > 0 && start < 4) {
             return !goodStartTime;
         } else if (start >= 17 && start <= 24) {
             return !goodStartTime;
@@ -47,7 +47,6 @@ module.exports = {
         if (bedtime > 0 && bedtime <= 4) {
             bedtime += 24;
         }
-
         if (bedtime < 24) {
             return !goodBedtime;
         }
@@ -89,5 +88,27 @@ module.exports = {
         }
 
         return Math.ceil(hoursWorkedAtPayGrade3);
+    },
+    calculatePay: function(pay1, pay2, pay3) {
+        return pay1*12 + pay2*8 + pay3*16;
+    },
+    wholeNight: function(start, bedtime, end) {
+        let totalForNight, a, b, c;
+
+//  Far from most efficient solution but provides specific feeback
+        if(module.exports.endTime(end)) {
+            if(module.exports.startTime(start)) {
+                if(module.exports.bedtimeCheck(bedtime)) {
+                    if(module.exports.timeRange(start, end)) {
+                        a = module.exports.payGrade1(start, bedtime);
+                        b = module.exports.payGrade2(bedtime, end);
+                        c = module.exports.payGrade3(end);
+                        totalForNight =  module.exports.calculatePay(a, b, c);
+                    } else { console.log("Your Start and End times conflict.");  totalForNight = false; }
+                } else { console.log("Bedtime should be before midnight."); totalForNight = false; }
+            } else { console.log("Your Start time is invalid."); totalForNight = false; }
+        } else { console.log("Your End time is invalid."); totalForNight = false; }
+
+        return totalForNight;
     }
 };

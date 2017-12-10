@@ -8,6 +8,8 @@ const bedtimeCheck = require("./index.js").bedtimeCheck;
 const payGrade1 = require("./index.js").payGrade1;
 const payGrade2 = require("./index.js").payGrade2;
 const payGrade3 = require("./index.js").payGrade3;
+const calculatePay = require("./index.js").calculatePay;
+const wholeNight = require("./index.js").wholeNight;
 
 describe("App", function() {
     describe("startTime()", function() {
@@ -109,6 +111,50 @@ describe("App", function() {
         it("Time worked at $16/hr should be 2", function() {
             let result = payGrade3(1.5);
             assert.equal(result, 2);
+        });
+    });
+    describe("calculatePay()", function() {
+        it("Pay for 1 hour before bedtime should be 12", function() {
+            let result = calculatePay(1, 0, 0);
+            assert.equal(result, 12);
+        });
+        it("Pay for 1 hour after bedtime and before midnight should be 8", function() {
+            let result = calculatePay(0, 1, 0);
+            assert.equal(result, 8);
+        });
+        it("Pay for 1 hour after midnight should be 16", function() {
+            let result = calculatePay(0, 0, 1);
+            assert.equal(result, 16);
+        });
+        it("Pay for 2 hours before bedtime, 2 hours after bedtime but before midnight, and 4 hours after midnight should be 104", function() {
+            let result = calculatePay(2, 2, 4);
+            assert.equal(result, 104);
+        });
+    });
+    describe("wholeNight()", function() {
+        it("Function works properly", function() {
+            let result = wholeNight(17, 20, 2);
+            assert.equal(result, 100);
+        });
+        it("Bad Start should be false", function() {
+            let result = wholeNight(118, 20, 23);
+            assert.equal(result, false);
+        });
+        it("Bad End should be false", function() {
+            let result = wholeNight(17, 20, 5);
+            assert.equal(result, false);
+        });
+        it("Bad Bedtime should be false", function() {
+            let result = wholeNight(17, 1, 2);
+            assert.equal(result, false);
+        });
+        it("Conflicting Start/End times", function() {
+            let result = wholeNight(20, 23, 19);
+            assert.equal(result, false);
+        });
+        it("Round hour up", function() {
+            let result = wholeNight(20.5, 23, 2.4);
+            assert.equal(result, 92);
         });
     });
 });
