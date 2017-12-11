@@ -11,7 +11,7 @@ const payGrade3 = require("./index.js").payGrade3;
 const calculatePay = require("./index.js").calculatePay;
 const wholeNight = require("./index.js").wholeNight;
 
-describe("App", function() {
+describe("Test", function() {
     describe("startTime()", function() {
         it("Start time should not be between 4am and 5pm", function() {
             let result = startTime(12);
@@ -86,11 +86,11 @@ describe("App", function() {
             let result = payGrade1(17, 22);
             assert.equal(result, 5);
         });
-        it("Time worked at $12/hr should be 0", function() {
-            let result = payGrade1(18, 2);
-            assert.equal(result, 6);
+        it("Time worked at $12/hr should be 4", function() {
+            let result = payGrade1(18, 22);
+            assert.equal(result, 4);
         });
-        it("Time worked at $12/hr should be 0", function() {
+        it("Time worked at $12/hr should be 2", function() {
             let result = payGrade1(20, 22);
             assert.equal(result, 2);
         });
