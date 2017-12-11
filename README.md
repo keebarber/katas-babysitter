@@ -24,7 +24,7 @@ Objective was to learn Test-Driven Development as a project for Pillar Consultin
 ---------------------------------------------------------------------------------------------------
 I used the Mocha and Chai frameworks. In order to install, run in bash terminal:
 
-npm install
+npm install  
 npm run test
  
 ***This assumes that you have already installed npm on your computer.
