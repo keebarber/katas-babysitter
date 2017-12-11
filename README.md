@@ -22,21 +22,12 @@ I want to calculate my nightly charge.
 
 Objective was to learn Test-Driven Development as a project for Pillar Consulting.
 ---------------------------------------------------------------------------------------------------
-I used the Mocha and Chai frameworks. In order to install, run:
+I used the Mocha and Chai frameworks. In order to install, run in bash terminal:
 
-npm init
-npm install mocha chai --save-dev
-
-In the package.json file, set:
-
-"scripts": {
-  "test": "mocha || true"
- }
+npm install
+npm run test
  
- then in the console, run:
- 
- npm run test
- 
+***This assumes that you have already installed npm on your computer.
 ---------------------------------------------------------------------------------------------------
 
 Project was completed with the help of the tutorial at: https://www.youtube.com/watch?v=MLTRHc5dk6s
