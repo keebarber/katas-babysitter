@@ -1,114 +1,177 @@
-module.exports = {
-    startTime: function(start) {
-        let goodStartTime = false;
+(() => {
+    const earliestStart = 17;
+    const latestEnd = 4;
+    const midnight = 24;
 
-        if (start > 0 && start < 4) {
-            return !goodStartTime;
-        } else if (start >= 17 && start <= 24) {
-            return !goodStartTime;
-        }
+    let totalPay = 0;
+    document.getElementById("totalpay").innerHTML = totalPay;
 
-        return goodStartTime;
-    },
-    endTime: function(end) {
-        let goodEndTime = false;
+    const calculate = document.getElementById("calculate");
+    calculate.onclick = () => {
+        debugger;
+        let startTime = Number(document.getElementById("start").value);
+        let bedTime = Number(document.getElementById("bed").value);
+        let endTime = Number(document.getElementById("end").value);
 
-        if (end > 0 && end <= 4) {
-            return !goodEndTime;
-        } else if (end > 17 && end <= 24) {
-            return !goodEndTime;
-        }
-
-        return goodEndTime;
-    },
-    timeRange: function(start, end) {
-        let goodTimeRange = false;
-
-        //  Adds 24 if time is after midnight to account for rollover
-        if (start > 0 && start <= 4) {
-            start += 24;
-        }
-        if (end > 0 && end <= 4) {
-            end += 24;
-        }
-
-        if (start === end) {
-            return goodTimeRange;
-        } else if (start < end) {
-            return !goodTimeRange;
-        }
-
-        return goodTimeRange;
-    },
-    bedtimeCheck: function(bedtime) {
-        //  Bedtime has to be before midnight but could be before babysitter arrives
-        let goodBedtime = false;
-
-        if (bedtime > 0 && bedtime <= 4) {
-            bedtime += 24;
-        }
-        if (bedtime < 24) {
-            return !goodBedtime;
-        }
-        return goodBedtime;
-    },
-    payGrade1: function(start, bedtime) {
-        let hoursWorkedAtPayGrade1 = 0;
-
-        if (start < 24 && start >= 17) {
-            if (bedtime < 17) {
-                hoursWorkedAtPayGrade1 = 24 - start;
-            } else {
-                hoursWorkedAtPayGrade1 = bedtime - start;
+        //  Sets midnight value to 24 to computing purposes
+            if (startTime == 0) {
+                startTime = midnight;
             }
-        }
+             if (bedTime == 0) {
+                bedTime = midnight;
+            }
+            if (endTime == 0) {
+                endTime = midnight;
+            }
 
-        return Math.ceil(hoursWorkedAtPayGrade1);
-    },
-    payGrade2: function(bedtime, end) {
-        let hoursWorkedAtPayGrade2 = 0;
 
-        if (end > 0 && end <= 4) {
-            end += 24;
-        }
+        let totalPay = testing.wholeNight(startTime, bedTime, endTime);
 
-        if (end > 24) {
-            hoursWorkedAtPayGrade2 = 24 - bedtime;
+        if (totalPay) {
+            document.getElementById("totalpay").innerHTML = totalPay;
         } else {
-            hoursWorkedAtPayGrade2 = end - bedtime;
+            document.getElementById("start").value = "";
+            document.getElementById("bed").value = "";
+            document.getElementById("end").value = "";
         }
+    };
 
-        return Math.ceil(hoursWorkedAtPayGrade2);
-    },
-    payGrade3: function(end) {
-        let hoursWorkedAtPayGrade3 = 0;
+    let testing = {
+        startTime: start => {
+            let goodStartTime = false;
 
-        if (end > 0 && end <= 4) {
-            hoursWorkedAtPayGrade3 = end;
+            if (start >= earliestStart && start <= midnight) {
+                return !goodStartTime;
+            }
+
+            return goodStartTime;
+        },
+        endTime: end => {
+            debugger;
+            let goodEndTime = false;
+
+            if ((end > 0 && end <= latestEnd) || (end > earliestStart && end <= midnight)) {
+                return !goodEndTime;
+            }
+
+            return goodEndTime;
+        },
+        timeRange: (start, end) => {
+            debugger;
+            let goodTimeRange = false;
+            let lateStart = start;
+            let lateEnd = end;
+
+            //  Adds 24 if time is after midnight to account for rollover
+            if (start > 0 && start <= latestEnd) {
+                lateStart = start + 24;
+            }
+            if (end > 0 && end <= latestEnd) {
+                lateEnd = end + 24;
+            }
+
+            if (lateStart < lateEnd) {
+                return !goodTimeRange;
+            }
+
+            return goodTimeRange;
+        },
+        bedtimeCheck: bedtime => {
+            //  Bedtime has to be before or equal to midnight but could be before babysitter arrives
+            let goodBedtime = false;
+
+            if (bedtime > 0 && bedtime <= latestEnd) {
+                bedtime += 24;
+            }
+            if (bedtime <= 24) {
+                return !goodBedtime;
+            }
+            return goodBedtime;
+        },
+        payGrade1: (start, bedtime) => {
+            let hoursWorkedAtPayGrade1 = 0;
+            debugger;
+            if (start < midnight && start >= earliestStart) {
+                if (bedtime > start) {
+                    hoursWorkedAtPayGrade1 = bedtime - start;
+                }
+            }
+
+            return Math.ceil(hoursWorkedAtPayGrade1);
+        },
+        payGrade2: (start, bedtime, end) => {
+            let hoursWorkedAtPayGrade2 = 0;
+            debugger;
+            if (end > 0 && end <= latestEnd) {
+                end += 24;
+            }
+
+            if ( (end <= midnight) && (bedtime < start) ) {
+                hoursWorkedAtPayGrade2 = end - start;
+            } else if ( (end <= midnight) && (bedtime > start) ) {
+                hoursWorkedAtPayGrade2 = end - bedtime;
+            } else if ( (end >= midnight) && (bedtime > start) ) {
+                hoursWorkedAtPayGrade2 = 24 - bedtime;
+            } else if ( (end >= midnight) && (bedtime < start) ) {
+                hoursWorkedAtPayGrade2 = 24 - start;
+            } else {
+                hoursWorkedAtPayGrade2 = bedtime-start;
+            }
+
+            return Math.ceil(hoursWorkedAtPayGrade2);
+        },
+        payGrade3: end => {
+            let hoursWorkedAtPayGrade3 = 0;
+            debugger;
+            if (end > 0 && end <= latestEnd) {
+                hoursWorkedAtPayGrade3 = end;
+            }
+
+            return Math.ceil(hoursWorkedAtPayGrade3);
+        },
+        calculatePay: (pay1, pay2, pay3) => {
+            return pay1 * 12 + pay2 * 8 + pay3 * 16;
+        },
+        wholeNight: (start, bedtime, end) => {
+            let totalForNight, a, b, c;
+            let e = testing;
+            debugger;
+
+            //  Far from most efficient solution but provides specific feeback
+            if (e.endTime(end)) {
+                if (e.startTime(start)) {
+                    if (e.bedtimeCheck(bedtime)) {
+                        if (e.timeRange(start, end)) {
+                            let a = e.payGrade1(start, bedtime);
+                            let b = e.payGrade2(start, bedtime, end);
+                            let c = e.payGrade3(end);
+                            totalForNight = e.calculatePay(a, b, c);
+                        } else {
+                            alert("Your start and end times conflict.");
+                            console.log("Your Start and End times conflict.");
+                            totalForNight = false;
+                        }
+                    } else {
+                        alert(
+                            "Your bedtime is either after midnight or invalid."
+                        );
+                        console.log("Bedtime should be before midnight.");
+                        totalForNight = false;
+                    }
+                } else {
+                    alert(
+                        "Your start time is not between 1700 and 2400 or invalid"
+                    );
+                    console.log("Your Start time is invalid.");
+                    totalForNight = false;
+                }
+            } else {
+                alert("Your end time is after 0400 or invalid");
+                console.log("Your End time is invalid.");
+                totalForNight = false;
+            }
+
+            return totalForNight;
         }
-
-        return Math.ceil(hoursWorkedAtPayGrade3);
-    },
-    calculatePay: function(pay1, pay2, pay3) {
-        return pay1*12 + pay2*8 + pay3*16;
-    },
-    wholeNight: function(start, bedtime, end) {
-        let totalForNight, a, b, c;
-
-//  Far from most efficient solution but provides specific feeback
-        if(module.exports.endTime(end)) {
-            if(module.exports.startTime(start)) {
-                if(module.exports.bedtimeCheck(bedtime)) {
-                    if(module.exports.timeRange(start, end)) {
-                        a = module.exports.payGrade1(start, bedtime);
-                        b = module.exports.payGrade2(bedtime, end);
-                        c = module.exports.payGrade3(end);
-                        totalForNight =  module.exports.calculatePay(a, b, c);
-                    } else { console.log("Your Start and End times conflict.");  totalForNight = false; }
-                } else { console.log("Bedtime should be before midnight."); totalForNight = false; }
-            } else { console.log("Your Start time is invalid."); totalForNight = false; }
-        } else { console.log("Your End time is invalid."); totalForNight = false; }
-
-        return totalForNight;
-    }
-};
+    };
+})();

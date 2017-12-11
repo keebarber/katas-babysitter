@@ -133,19 +133,19 @@ describe("App", function() {
     });
     describe("wholeNight()", function() {
         it("Function works properly", function() {
-            let result = wholeNight(17, 20, 2);
-            assert.equal(result, 100);
+            let result = wholeNight(18, 20, 2);
+            assert.equal(result, 88);
         });
-        it("Bad Start should be false", function() {
-            let result = wholeNight(118, 20, 23);
+        it("Bad Start starttime should return a false", function() {
+            let result = wholeNight(16, 20, 23);
             assert.equal(result, false);
         });
-        it("Bad End should be false", function() {
+        it("Bad Endtimer should return a false", function() {
             let result = wholeNight(17, 20, 5);
             assert.equal(result, false);
         });
-        it("Bad Bedtime should be false", function() {
-            let result = wholeNight(17, 1, 2);
+        it("Bad Bedtime should return a false", function() {
+            let result = wholeNight(18, 1, 2);
             assert.equal(result, false);
         });
         it("Conflicting Start/End times", function() {
