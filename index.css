@@ -1,0 +1,61 @@
+body, html {
+	background: url("public/images/background-img.jpg") no-repeat center center fixed;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+.flexcontainer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	width: 100%;
+}
+
+#displaycontainer {
+	border-radius: 25px;
+	padding: 25px;
+	text-align: center;
+	color: white;
+}
+h2 {
+	width: 400px;
+	display: flex;
+	justify-content: space-between;
+	border-bottom: 1px solid black;
+	color: white;
+	padding: 5px;
+}
+
+input {
+	background-color: inherit;
+	width: 250px;
+	border-style: none;
+	text-align: right;
+	color: white;
+}
+
+input:focus {
+	outline: none;
+}
+
+button {
+	background-color: #c0392b;
+	border: none;
+	border-radius: 10px;
+	width: 400px;
+	height: 40px;
+	font-size: 1.25em;
+	font-style: bold;
+}
+
+button:hover {
+	opacity: .7;
+	border: 1px solid white;
+	color: white;
+}
+
+button:focus {
+	outline: none;
+}

@@ -10,12 +10,15 @@
     </head>
     <body>
 
-    <div>
-        <input autofocus=true id="start" type="text" placeholder="Start Time" />
-        <input id="bed" type="text" placeholder="BedTime" />
-        <input id="end" type="text" placeholder="End Time" />
-        <p>You made: $<span id="totalpay"></span></p>
-        <button id="calculate">Calculate Pay</button>
+    <div class = "flexcontainer">
+        <div id="displaycontainer">
+            <h1>Enter time in 24-hour format</h1>
+            <h2>Start Time: <input autofocus=true id="start" type="text" value="" placeholder="Start Time" /></h2>
+            <h2>Bed Time: <input id="bed" type="text" value="" placeholder="BedTime" /></h2>
+            <h2>End Time: <input id="end" type="text" value="" placeholder="End Time" /></h2>
+            <h2>Total Amount Owed: <span id="totalpay"></span></h2>
+            <button id="calculate">Calculate Pay</button>
+            </div>
     </div>
         <script src="App.js"></script>
     </body>
